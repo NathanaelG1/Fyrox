@@ -784,6 +784,7 @@ impl SceneViewer {
                         match *msg {
                             WidgetMessage::MouseDown { button, pos, .. } => {
                                 if button == MouseButton::Left {
+                                    self.scene_gizmo.is_left_mouse_button_pressed = true;
                                     let rel_pos = pos
                                         - engine
                                             .user_interfaces
@@ -828,13 +829,21 @@ impl SceneViewer {
                                 }
                             }
                             WidgetMessage::MouseMove { pos, .. } => {
-                                let rel_pos = pos
-                                    - engine
-                                        .user_interfaces
-                                        .first()
-                                        .node(self.scene_gizmo_image)
-                                        .screen_position();
-                                self.scene_gizmo.on_mouse_move(rel_pos, engine);
+                                if self.scene_gizmo.is_left_mouse_button_pressed {
+                                    let rel_pos = pos
+                                        - engine
+                                            .user_interfaces
+                                            .first()
+                                            .node(self.scene_gizmo_image)
+                                            .screen_position();
+                                    self.scene_gizmo.on_mouse_move(rel_pos, engine);
+                                }
+                            }
+
+                            WidgetMessage::MouseUp { button, .. } => {
+                                if button == MouseButton::Left {
+                                    self.scene_gizmo.is_left_mouse_button_pressed = false;
+                                }
                             }
                             _ => (),
                         }
