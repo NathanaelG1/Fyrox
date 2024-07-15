@@ -1044,6 +1044,7 @@ impl SceneViewer {
             render_target.map(Into::into),
         ));
     }
+
     pub fn set_title(&self, ui: &UserInterface, title: String) {
         ui.send_message(WindowMessage::title(
             self.window,
